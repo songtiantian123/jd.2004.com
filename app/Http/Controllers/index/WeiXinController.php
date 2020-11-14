@@ -121,7 +121,7 @@ class WeiXinController extends Controller
                                     $result = $this->text($toUser,$fromUser,$content);
                                     return $result;
                                     break;
-                                case 'sign':// 签到fsdfs
+                                case 'sign':// 签到
                                     $key = 'sign'.date('Y-m-d H:i:s',time());
                                     $content = '签到成功';
                                     $user_sign = Redis::zrange($key,0,-1);
