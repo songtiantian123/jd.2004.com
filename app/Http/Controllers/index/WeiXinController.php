@@ -505,11 +505,11 @@ class WeiXinController extends Controller
                             'name'=> '商城',
                             'url'=> 'https://2004.liliqin.xyz/',
                         ],
-                        [
-                            'type'=>'click',
-                            'name'=>'每日推荐',
-                            'key'=>'recommend',
-                        ]
+//                        [
+//                            'type'=>'click',
+//                            'name'=>'每日推荐',
+//                            'key'=>'recommend',
+//                        ]
                     ]
 
                 ],
