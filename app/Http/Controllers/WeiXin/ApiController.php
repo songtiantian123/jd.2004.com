@@ -11,6 +11,17 @@ use App\Model\TicketModel;
 use Illuminate\Http\Request;
 class ApiController extends Controller{
     // 小程序
+    /**
+     * 关闭调试
+     */
+    public function __construct()
+    {
+        app('debugbar')->disable();
+    }
+    /**
+     * test
+     * 商品名称 商品价格 商品id 用json字符串格式
+     */
     public function test(){
         $goods_info = [
             'goods_id'=>12,
