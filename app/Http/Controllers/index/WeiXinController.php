@@ -510,11 +510,6 @@ class WeiXinController extends Controller
                             'name'=>'每日推荐',
                             'key'=>'recommend',
                         ],
-                        [
-                        'type'=>'click',
-                        'name'=>'测试',
-                        'key'=>'shi',
-                    ]
                     ]
 
                 ],

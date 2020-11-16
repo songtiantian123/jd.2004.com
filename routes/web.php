@@ -129,5 +129,10 @@ Route::prefix('/text')->group(function(){
     Route::get('/voice','WeiXinController@vic');// 下载素材音频
     Route::get('/video','WeiXinController@vid');// 下载素材视频
 });
+
+// 小程序接口
+Route::prefix('/api')->group(function(){
+   Route::get('/test','WeiXin\ApiController@test');
+});
 ?>
 
