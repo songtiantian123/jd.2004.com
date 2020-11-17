@@ -121,6 +121,8 @@ Route::get('/wx/create_menu','index\WeiXinController@createMenu');// 创建菜�
 Route::get('/wx/check','index\WeiXinController@check');// 验证签名
 Route::get('/wx/authoriz','index\WeiXinController@index');// 微信网页授权
 Route::get('/wx/auth','index\WeiXinController@jump');// 微信网页授权
+Route::get('/wx/xcxlogin','WeiXin\XcxController@login');// 微信小程序登录 获取code
+
 // text 路由分组
 Route::prefix('/text')->group(function(){
     Route::get('/guzzle1','TextController@guzzle1');// guzzle get请求
