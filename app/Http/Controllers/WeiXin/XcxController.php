@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\WeiXin;
 use App\Http\Controllers\Controller;
+use App\Model\GoodsModel;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -16,6 +17,7 @@ class XcxController extends Controller{
     public function login(Request $request){
       $code = $request->get('code');
       $url = 'https://api.weixin.qq.com/sns/jscode2session?appid='.env('WX_XCX_APPID').'&secret='.env('WX_XCX_SECRET').'&js_code='.$code.'&grant_type=authorization_code';
+      // 获取用户信息
       $data = json_decode(file_get_contents($url),true);
       $openid = $data['openid'];
 //      echo 'openid：'.$openid;die;
@@ -27,8 +29,7 @@ class XcxController extends Controller{
                 'msg'=>'登录失败',
             ];
         }else{// 成功
-            $res = Wx_UserModel::where('openid',$openid)->first();
-            if(empty($res)){
+            Wx_UserModel::insert(['openid'=>$data['openid']]);
                 $token = sha1($data['openid'].$data['session_key'].mt_rand(0,999999));
                 // 保存token到redis中
                 $redis_key = 'xcx_token:'.$token;
@@ -36,22 +37,13 @@ class XcxController extends Controller{
                 // 设置过期时间
                 Redis::expire($redis_key,7200);
                 $response = [
-                    'openid'=>$openid,
-//                'error'=>0,
-//                'msg'=>'登录成功',
-//                'data'=>[
-//                    'token'=>$token,
-//                ],
-                ];
-                Wx_UserModel::insert($response);
-            }else{
-                $response = [
-                    'error'=>400001,
-                    'msg'=>'已存在',
+                    'error'=>0,
+                    'msg'=>'ok',
+                    'data'=>[
+                        'token'=>$token,
+                    ]
                 ];
             }
-
-        }
         return $response;
     }
 }

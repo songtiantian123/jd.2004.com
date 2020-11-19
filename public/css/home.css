@@ -1,0 +1,33 @@
+.swiper{
+    border: 1px solid red;
+    height: 200px;
+    background-color: #9de0f6;
+}
+
+.nav{
+    margin-top: 20px;
+    border: 1px solid #2F96B4;
+}
+.nav span{
+    margin-left: 20px;
+    border: 1px solid #d58512;
+    color: red;
+    font-size: 18px;
+}
+span:hover{
+    color: green;
+}
+
+.list{
+    float: left;
+    margin-top: 20px;
+    border: 1px solid #FFD6B3;
+    padding-bottom: 25px;
+}
+.list ul li{
+    float: left;
+    margin-top: 15px;
+    margin-left: 20px;
+    list-style: none;
+    border: 1px solid #0d6aad;
+}

@@ -122,6 +122,7 @@ Route::get('/wx/check','index\WeiXinController@check');// 验证签名
 Route::get('/wx/authoriz','index\WeiXinController@index');// 微信网页授权
 Route::get('/wx/auth','index\WeiXinController@jump');// 微信网页授权
 Route::get('/wx/xcxlogin','WeiXin\XcxController@login');// 微信小程序登录 获取code
+Route::get('/wx/details','WeiXin\XcxController@details');// 微信小程序登录 获取code
 
 // text 路由分组
 Route::prefix('/text')->group(function(){
@@ -134,7 +135,8 @@ Route::prefix('/text')->group(function(){
 
 // 小程序接口
 Route::prefix('/api')->group(function(){
-   Route::get('/test','WeiXin\ApiController@test');
+    Route::get('/details','WeiXin\ApiController@goodslist');    // 列表页
+    Route::get('/getDetails','WeiXin\ApiController@getDetails');// 详情页
 });
 ?>
 
