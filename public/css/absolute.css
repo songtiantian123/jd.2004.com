@@ -1,0 +1,15 @@
+/** 绝对定位 **/
+.box{
+    display: inline-block;/** 文字 从垂直变为 纵向**/
+    background: #66afe9;
+    width: 100px;/** div的宽度大小  100px **/
+    height: 100px;/** div的高度大小 100px **/
+    float: left;/** 左浮动 **/
+    margin: 20px;/** 外边距 不带任何属性是全局 也就是说 上 左 下 右 全部是20px  **/
+    color: white;/** 文字颜色 **/
+}
+#three{
+    position: absolute;/** **/
+    top: 20px;
+    left: 20px;
+}

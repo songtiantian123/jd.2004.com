@@ -1,0 +1,14 @@
+/** 相对定位 **/
+.box{
+    display: inline-block;/** 文字 从垂直 变为 纵向**/
+    width:100px;/** 字与字 之间的 间距 **/
+    height: 100px;
+    background: red;/** 背景颜色 **/
+    color:antiquewhite;/** 文字颜色**/
+}
+#two{
+    position: relative;
+    top: 20px;/** 与顶部之间的距离 20px **/
+    left: 20px;/** 往左移动 20px **/
+    background: #0d6aad;
+}

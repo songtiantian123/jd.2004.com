@@ -114,15 +114,17 @@ Route::post('/text3','TextController@text3');// 测试3
 
 
 // 微信
-//Route::post('/wx','WeiXinController@checkSignature');// 微信接口
-Route::match(['get','post'],'/wx','index\WeiXinController@wxEvent');// 接收事件推送
-Route::get('wx/token','index\WeiXinController@getAccessToken');// 获取access_token
-Route::get('/wx/create_menu','index\WeiXinController@createMenu');// 创建菜单
-Route::get('/wx/check','index\WeiXinController@check');// 验证签名
-Route::get('/wx/authoriz','index\WeiXinController@index');// 微信网页授权
-Route::get('/wx/auth','index\WeiXinController@jump');// 微信网页授权
-Route::get('/wx/xcxlogin','WeiXin\XcxController@login');// 微信小程序登录 获取code
-Route::get('/wx/details','WeiXin\XcxController@details');// 微信小程序登录 获取code
+Route::prefix('/wx')->group(function (){
+    //Route::post('/wx','WeiXinController@checkSignature');// 微信接口
+    Route::match(['get','post'],'/','index\WeiXinController@wxEvent');// 接收事件推送
+    Route::get('/token','index\WeiXinController@getAccessToken');// 获取access_token
+    Route::get('/create_menu','index\WeiXinController@createMenu');// 创建菜单
+    Route::get('/check','index\WeiXinController@check');// 验证签名
+    Route::get('/authoriz','index\WeiXinController@index');// 微信网页授权
+    Route::get('/auth','index\WeiXinController@jump');// 微信网页授权
+    Route::get('/xcxlogin','WeiXin\XcxController@login');// 微信小程序登录 获取code
+});
+
 
 // text 路由分组
 Route::prefix('/text')->group(function(){

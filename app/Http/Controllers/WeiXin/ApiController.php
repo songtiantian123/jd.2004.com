@@ -10,6 +10,8 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 // use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use App\Model\TicketModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redis;
+
 class ApiController extends Controller{
     // 小程序
     /**
@@ -39,13 +41,33 @@ class ApiController extends Controller{
      * 商品详情(一件商品的详细信息)
      */
     public function getDetails(Request $request){
+        $token = $request->get('access_token');
+        // 验证token是否有效
+        $token_key = 'h:xcx:login:'.$token;
+        echo '<pre>'. 'key: >>>>>'.$token_key;echo '</pre>';
+        // 检查token是否存在
+        $status = Redis::exists($token_key);
+//        dd($status);
+        if($status==0){
+            $reponse = [
+              'error'=>400004,
+              'msg'=>'未授权'
+            ];
+            return $reponse;
+        }
         $goods_id = $request->get('goods_id');
-        $getDetaols = GoodsModel::where('goods_id',$goods_id)->first();
+        $getDetaols = GoodsModel::find($goods_id);
         $res = [
            'error'=>0,
            'msg'=>'ok',
            'data'=>[
                'res'=>$getDetaols,
+//               'goods_img'=>[
+//                   '/images/pet.jpg',
+//                   '/images/rabbit.jpg',
+//                   '/images/pet.jpg',
+//                   '/images/rabbit.jpg',
+//               ],
            ]
         ];
         return $res;
