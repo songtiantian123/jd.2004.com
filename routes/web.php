@@ -122,7 +122,7 @@ Route::prefix('/wx')->group(function (){
     Route::get('/check','index\WeiXinController@check');// 验证签名
     Route::get('/authoriz','index\WeiXinController@index');// 微信网页授权
     Route::get('/auth','index\WeiXinController@jump');// 微信网页授权
-    Route::get('/xcxlogin','WeiXin\XcxController@login');// 微信小程序登录 获取code
+    Route::post('/xcxlogin','WeiXin\XcxController@login');// 微信小程序登录 获取code
 });
 
 
@@ -139,6 +139,7 @@ Route::prefix('/text')->group(function(){
 Route::prefix('/api')->group(function(){
     Route::get('/details','WeiXin\ApiController@goodslist');    // 列表页
     Route::get('/getDetails','WeiXin\ApiController@getDetails');// 详情页
+    Route::post('/addCart','WeiXin\ApiController@index');// 购物车
 });
 ?>
 

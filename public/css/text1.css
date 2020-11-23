@@ -1,0 +1,68 @@
+/**  **/
+/** 导航栏开始 **/
+.content{
+    margin: 0px; /** 外边距  **/
+    padding: 0px; /** 内边距  **/
+}
+.nav{
+    padding-top: 30px; /** 外边距  **/
+    float: left; /** 左浮动 **/
+    width: 900px;
+ }
+a{
+    text-decoration: none; /** 去掉下划线 **/
+}
+.content .nav .active{
+    float: left; /** 左浮动 **/
+    color: #66afe9;
+}
+.content .nav .t1{
+    float: left; /** 左浮动 **/
+    margin-left: 10px; /** 外边距  **/
+}
+.content .nav .t2{
+    float: left; /** 左浮动 **/
+
+}
+.content .nav .t3{
+    float: left; /** 左浮动 **/
+}
+.content .nav .t4{
+    float: left; /** 左浮动 **/
+}
+.content .nav .t1 ul li{
+    list-style: none; /** 去除 ul li 产生的圆点 **/
+}
+.content .nav .t2 ul li{
+    list-style: none; /** 去除 ul li 产生的圆点 **/
+}
+.content .nav .t3 ul li{
+    list-style: none; /** 去除 ul li 产生的圆点 **/
+}
+.content .nav .t4 ul li{
+    list-style: none; /** 去除 ul li 产生的圆点 **/
+}
+span:hover{ /** 鼠标划过改变颜色 **/
+    color: red;
+}
+/*span:active{ !** 鼠标点击时改变颜色 **!*/
+/*    color: #43cd6e;*/
+/*}*/
+span ul li{ /** 将二级菜单隐藏 **/
+    visibility: hidden;
+}
+span:hover ul li{ /** 将二级菜单显示 **/
+    visibility: visible;
+    color: black;
+}
+span ul li:active{ /** 将二级菜单点击改变文字颜色 **/
+    color: #1b7e5a;
+}
+/** 导航栏结束 **/
+/** 左侧菜单栏 **/
+.content .nav1{
+    float: left;
+    margin-right: 700px;
+    margin-bottom: 300px;
+}
+

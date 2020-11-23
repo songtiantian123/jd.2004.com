@@ -1,0 +1,17 @@
+/** 固定定位 **/
+#first{
+    width: 120px;
+    height: 600px;
+    border: 1px solid grey;
+    line-height: 600px;
+    background-color: #B7F1FF;
+}
+#sceond{
+    position: fixed;
+    top: 30px;
+    left:160px;
+    width: 60px;
+    height: 60px;
+    border: 1px solid silver;
+    background-color: #66afe9;
+}
