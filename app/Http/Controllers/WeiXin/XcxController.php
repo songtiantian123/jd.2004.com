@@ -105,31 +105,31 @@ class XcxController extends Controller{
                     'type'=>3 // 小程序
                 ];
                 Wx_UserModel::insertGetId($u_info);
-                // 生成token
-                $token = sha1($data['openid'].$data['session_key'].mt_rand(0,999999));
-                // 保存token
-                $redis_login_hash = 'h:xcx:login:'.$token;
-                echo $redis_login_hash;
-                $login_info= [
-                    'uid'=>1234,
-                    'user_name'=>'张三',
-                    'login_time'=>date('Y-m-d H:i:s'),
-                    'login_ip'=>$request->getClientIp(),
-                    'token'=>$token
-                ];
-                // 保存登录信息
-                Redis::hMset($redis_login_hash,$login_info);
-                // 设置过期时间
-                Redis::expire($redis_login_hash,7200);
-                $response = [
-                    'error'=>0,
-                    'msg'=>'ok',
-                    'data'=>[
-                        'token'=>$token,
-                    ]
-                ];
-                return $response;
             }
+            // 生成token
+            $token = sha1($data['openid'].$data['session_key'].mt_rand(0,999999));
+//                 保存token
+            $redis_login_hash = 'h:xcx:login:'.$token;
+//            echo $redis_login_hash;
+            $login_info= [
+                'uid'=>1234,
+                'user_name'=>'张三',
+                'login_time'=>date('Y-m-d H:i:s'),
+                'login_ip'=>$request->getClientIp(),
+                'token'=>$token
+            ];
+            // 保存登录信息
+            Redis::hMset($redis_login_hash,$login_info);
+            // 设置过期时间
+            Redis::expire($redis_login_hash,7200);
+            $response = [
+                'error'=>0,
+                'msg'=>'ok',
+                'data'=>[
+                    'token'=>$token,
+                ]
+            ];
+            return $response;
         }
     }
 }

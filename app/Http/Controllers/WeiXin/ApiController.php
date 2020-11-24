@@ -50,8 +50,7 @@ class ApiController extends Controller
         $token = $request->get('access_token');
         // 验证token是否有效
         $token_key = 'h:xcx:login:' . $token;
-        echo '<pre>' . 'key: >>>>>' . $token_key;
-        echo '</pre>';
+        echo '<pre>' . 'key: >>>>>' . $token_key;echo '</pre>';
         $res = Redis::get($token_key);
 //        echo $res;die;
         // 检查token是否存在
@@ -80,12 +79,18 @@ class ApiController extends Controller
      * 加入购物车
      */
     public function index(Request $request){
+        $access_token = $request->get('access_token');
+//        echo 'access_token:'.$access_token;
         $goods_id = $request->get('goods_id');
+//        echo $goods_id;die;
         $goodsInfo = GoodsModel::where('goods_id',$goods_id)->first();
+//        dd($goodsInfo);
         if($goodsInfo){
             $cartInfo = [
-                'goods_id'=>$goodsInfo['goods_id'],
-                'add_time'=>time(),
+                'goods_id'=>$goodsInfo['goods_id'],// 商品id
+                'goods_name'=>$goodsInfo['goods_name'],// 商品名称
+                'add_time'=>time(),// 添加事件
+                'is_delete'=>1,// 1 删除 2 不删除
             ];
             Xcx_CartModel::insert($cartInfo);
             return $cartInfo;
