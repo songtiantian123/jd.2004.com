@@ -114,8 +114,25 @@ class ApiController extends Controller
      * 购物车列表
      */
     public function list(Request $request){
-      $res = Xcx_CartModel::get();
-      dd($res);
+      $uid = 2;
+
+    }
+
+    /**
+     * 加入收藏
+     * @param Request $request
+     */
+    public function addFav(Request $request){
+      $goods_id = $request->get('goods_id');// 商品id
+      // 加入收藏至redis 有序集合
+        $uid = 2;
+        $redis_key = 'ss:goods:fav:'.$uid;// 用户收藏的商品到有序集合
+        Redis::Zadd($redis_key,time(),$goods_id);// 添加至redis有序集合中
+        $response = [
+            'error'=>0,
+            'msg'=>'ok',
+        ];
+        return $response;
     }
 }
 

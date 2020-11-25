@@ -141,6 +141,7 @@ Route::prefix('/api')->group(function(){
     Route::get('/getDetails','WeiXin\ApiController@getDetails');// 详情页
     Route::post('/addCart','WeiXin\ApiController@index');// 加入购物车
     Route::post('/list','WeiXin\ApiController@list');// 加入购物车
+    Route::get('/addFav','WeiXin\ApiController@addFav');// 加入购物车
 });
 ?>
 
