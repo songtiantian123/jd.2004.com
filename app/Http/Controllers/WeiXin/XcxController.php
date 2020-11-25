@@ -62,6 +62,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redis;
 use App\Model\Wx_UserModel;
+use App\Model\Xcx_UserModel;
 class XcxController extends Controller{
     /**
      * 小程序登录
@@ -75,7 +76,7 @@ class XcxController extends Controller{
         // 使用code
         $url = 'https://api.weixin.qq.com/sns/jscode2session?appid='.env('WX_XCX_APPID').'&secret='.env('WX_XCX_SECRET').'&js_code='.$code.'&grant_type=authorization_code';
 //      echo $url;die;
-      // 获取用户信息
+      // 获取用户信息 openid 和 session_key
       $data = json_decode(file_get_contents($url),true);
 //      echo '<pre>';print_r($data);echo '</pre>';die;
 //        dd($data);
@@ -108,16 +109,15 @@ class XcxController extends Controller{
             }
             // 生成token
             $token = sha1($data['openid'].$data['session_key'].mt_rand(0,999999));
-//                 保存token
-            $redis_login_hash = 'h:xcx:login:'.$token;
-//            echo $redis_login_hash;
+            $redis_login_hash = 'h:xcx:login:'.$token;//保存token
             $login_info= [
-                'uid'=>1234,
-                'user_name'=>'张三',
-                'login_time'=>date('Y-m-d H:i:s'),
-                'login_ip'=>$request->getClientIp(),
-                'token'=>$token
+                'uid'=>$data['openid'], // 用户id
+                'user_name'=>'张三', // 用户名
+                'login_time'=>date('Y-m-d H:i:s'),// 用户登录事件
+                'login_ip'=>$request->getClientIp(),// 用户IP
+                'token'=>$token // token
             ];
+            Xcx_UserModel::insert($login_info);// 加入小程序用户表
             // 保存登录信息
             Redis::hMset($redis_login_hash,$login_info);
             // 设置过期时间
