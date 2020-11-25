@@ -91,10 +91,12 @@ class XcxController extends Controller{
             // 判断 新用户 或 旧用户
             $user = Wx_UserModel::where(['openid'=>$openid])->first();
             if($user){
-//                echo '旧用户';
+                // 旧用户
+                $uid = $user->id;
             }else{
+                // 新用户
                 $u_info = [
-                    'openid'=>$openid,
+                    'openid'=>$openid, //
                     'nickname'=>$userinfo['u']['nickName'],
                     'avatarUrl'=>$userinfo['u']['avatarUrl'],
                     'sex'=>$userinfo['u']['gender'],
@@ -102,10 +104,10 @@ class XcxController extends Controller{
                     'city'=>$userinfo['u']['city'],
                     'province'=>$userinfo['u']['province'],
                     'country'=>$userinfo['u']['country'],
-                    'add_time'=>time(),
+                    'add_time'=>time(), // 添加时间
                     'type'=>3 // 小程序
                 ];
-                $uid = Wx_UserModel::insertGetId($u_info);
+                $uid = Xcx_UserModel::insertGetId($u_info);
             }
             // 生成token
             $token = sha1($data['openid'].$data['session_key'].mt_rand(0,999999));
@@ -115,9 +117,10 @@ class XcxController extends Controller{
                 'user_name'=>'', // 用户名
                 'login_time'=>date('Y-m-d H:i:s'),// 用户登录事件
                 'login_ip'=>$request->getClientIp(),// 用户IP
-                'token'=>$token // token
+                'token'=>$token, // token
+                'openid'=>$openid
             ];
-            Xcx_UserModel::insert($login_info);// 加入小程序用户表
+//            Xcx_UserModel::insert($login_info);// 加入小程序用户表
             // 保存登录信息
             Redis::hMset($redis_login_hash,$login_info);
             // 设置过期时间

@@ -93,26 +93,27 @@ class ApiController extends Controller
      * 加入购物车
      */
     public function index(Request $request){
-        $token = $request->get('access_token');// 获取access_token
-        $key= "h:xcx:login:".$token;
-//        $token1 = Redis::hgetall($key);// 查询出用户信息
-//        $token = $token1['uid'];// 用户id
-//        $user_id = Xcx_UserModel::where('openid',$token['openid'])->select('uid')->first();// 根据用户id查询小程序用户表
         $goods_id = $request->get('goods_id');// 商品id
+        $uid = $_SERVER['uid'];
+        // 查询商品的价格
+        $shop_price = GoodsModel::find($goods_id)->shop_price;
+        // 将商品存入数据库或redis中
+
         $goodsInfo = GoodsModel::where('goods_id',$goods_id)->first();// 根据商品id查询一条数据
         if($goodsInfo){
             $cartInfo = [
                 'goods_id'=>$goodsInfo['goods_id'],// 商品id
-                //'uid'=>2, // 用户id
+                'uid'=>$uid, // 用户id
                 'goods_num'=>1,
                 'add_time'=>time(),// 添加时间
                 'is_delete'=>1,// 1 删除 2 不删除
+                'shop_price'=>$shop_price,
             ];
             $res = CartModel::insert($cartInfo);// 加入小程序购物车
             if($res){
                 $response=[
                     'error'=>0,
-                    'msg'=>"加入购物车成功",
+                    'msg'=>"ok",
                 ];
             }else{
                 $response=[
