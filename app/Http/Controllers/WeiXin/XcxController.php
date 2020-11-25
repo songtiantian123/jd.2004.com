@@ -105,14 +105,14 @@ class XcxController extends Controller{
                     'add_time'=>time(),
                     'type'=>3 // 小程序
                 ];
-                Wx_UserModel::insertGetId($u_info);
+                $uid = Wx_UserModel::insertGetId($u_info);
             }
             // 生成token
             $token = sha1($data['openid'].$data['session_key'].mt_rand(0,999999));
             $redis_login_hash = 'h:xcx:login:'.$token;//保存token
             $login_info= [
-                'uid'=>$data['openid'], // 用户id
-                'user_name'=>'张三', // 用户名
+                'uid'=>$uid, // 用户id
+                'user_name'=>'', // 用户名
                 'login_time'=>date('Y-m-d H:i:s'),// 用户登录事件
                 'login_ip'=>$request->getClientIp(),// 用户IP
                 'token'=>$token // token

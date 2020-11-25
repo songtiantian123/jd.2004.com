@@ -4,10 +4,11 @@ namespace App\Http\Controllers\WeiXin;
 use App\Http\Controllers\Controller;
 // use Illuminate\Foundation\Bus\DispatchesJobs;
 // use Illuminate\Routing\Controller as BaseController;
-use App\Model\Xcx_CartModel;
+use App\Model\CartModel;
 use App\Model\GoodsModel;
 use App\Model\Wx_UserModel;
 use App\Model\Xcx_UserModel;
+use App\Model\Xcx_GoodsDescModel;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 // use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use App\Model\TicketModel;
@@ -66,6 +67,18 @@ class ApiController extends Controller
         }
         $goods_id = $request->get('goods_id');
         $getDetaols = GoodsModel::find($goods_id);
+//        if($getDetaols){
+//            // 商品描述图片
+//            $desc_img = Xcx_GoodsDescModel::select('src')->where(['goods_id'=>$goods_id])->get();
+//            $getDetaols->desc_img = array_column($desc_img,'src');
+//            // 假图片 商品传播相册切换
+//            $getDetaols->gallery=[
+//                'https://img.alicdn.com/imgextra/i2/2206434878500/O1CN01FrVvMm2Cf3BNGIjSd_!!2206434878500.jpg_430x430q90.jpg',
+//                'https://img.alicdn.com/imgextra/i2/2206434878500/O1CN01FrVvMm2Cf3BNGIjSd_!!2206434878500.jpg_430x430q90.jpg',
+//                'https://img.alicdn.com/imgextra/i2/2206434878500/O1CN01FrVvMm2Cf3BNGIjSd_!!2206434878500.jpg_430x430q90.jpg',
+//                'https://img.alicdn.com/imgextra/i2/2206434878500/O1CN01FrVvMm2Cf3BNGIjSd_!!2206434878500.jpg_430x430q90.jpg',
+//            ];
+//        }
         $res = [
             'error' => 0,
             'msg' => 'ok',
@@ -82,20 +95,20 @@ class ApiController extends Controller
     public function index(Request $request){
         $token = $request->get('access_token');// 获取access_token
         $key= "h:xcx:login:".$token;
-        $token1 = Redis::hgetall($key);// 查询出用户信息
-        $token = $token1['uid'];// 用户id
-        $user_id = Xcx_UserModel::where('openid',$token['openid'])->select('uid')->first();// 根据用户id查询小程序用户表
+//        $token1 = Redis::hgetall($key);// 查询出用户信息
+//        $token = $token1['uid'];// 用户id
+//        $user_id = Xcx_UserModel::where('openid',$token['openid'])->select('uid')->first();// 根据用户id查询小程序用户表
         $goods_id = $request->get('goods_id');// 商品id
         $goodsInfo = GoodsModel::where('goods_id',$goods_id)->first();// 根据商品id查询一条数据
         if($goodsInfo){
             $cartInfo = [
                 'goods_id'=>$goodsInfo['goods_id'],// 商品id
-                'goods_name'=>$goodsInfo['goods_name'],// 商品名称
+                //'uid'=>2, // 用户id
+                'goods_num'=>1,
                 'add_time'=>time(),// 添加时间
-                'uid'=>2, // 用户id
                 'is_delete'=>1,// 1 删除 2 不删除
             ];
-            $res = Xcx_CartModel::insert($cartInfo);// 加入小程序购物车
+            $res = CartModel::insert($cartInfo);// 加入小程序购物车
             if($res){
                 $response=[
                     'error'=>0,
