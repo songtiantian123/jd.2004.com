@@ -49,44 +49,48 @@ class ApiController extends Controller
      */
     public function getDetails(Request $request)
     {
-        $token = $request->get('access_token');
-        // 验证token是否有效
-        $token_key = 'h:xcx:login:' . $token;
-        echo '<pre>' . 'key: >>>>>' . $token_key;echo '</pre>';
-        $res = Redis::get($token_key);
-//        echo $res;die;
-        // 检查token是否存在
-        $status = Redis::exists($token_key);
-//        dd($status);
-        if ($status == 0) {
-            $reponse = [
-                'error' => 400004,
-                'msg' => '未授权'
-            ];
-            return $reponse;
-        }
+//        $token = $request->get('access_token');
+//        // 验证token是否有效
+//        $token_key = 'h:xcx:login:' . $token;
+//        echo '<pre>' . 'key: >>>>>' . $token_key;echo '</pre>';
+//        $res = Redis::get($token_key);
+////        echo $res;die;
+//        // 检查token是否存在
+//        $status = Redis::exists($token_key);
+////        dd($status);
+//        if ($status == 0) {
+//            $reponse = [
+//                'error' => 400004,
+//                'msg' => '未授权'
+//            ];
+//            return $reponse;
+//        }
         $goods_id = $request->get('goods_id');
         $getDetaols = GoodsModel::find($goods_id);
-//        if($getDetaols){
-//            // 商品描述图片
-//            $desc_img = Xcx_GoodsDescModel::select('src')->where(['goods_id'=>$goods_id])->get();
-//            $getDetaols->desc_img = array_column($desc_img,'src');
-//            // 假图片 商品传播相册切换
-//            $getDetaols->gallery=[
-//                'https://img.alicdn.com/imgextra/i2/2206434878500/O1CN01FrVvMm2Cf3BNGIjSd_!!2206434878500.jpg_430x430q90.jpg',
-//                'https://img.alicdn.com/imgextra/i2/2206434878500/O1CN01FrVvMm2Cf3BNGIjSd_!!2206434878500.jpg_430x430q90.jpg',
-//                'https://img.alicdn.com/imgextra/i2/2206434878500/O1CN01FrVvMm2Cf3BNGIjSd_!!2206434878500.jpg_430x430q90.jpg',
-//                'https://img.alicdn.com/imgextra/i2/2206434878500/O1CN01FrVvMm2Cf3BNGIjSd_!!2206434878500.jpg_430x430q90.jpg',
-//            ];
-//        }
-        $res = [
-            'error' => 0,
-            'msg' => 'ok',
-            'data' => [
-                'res' => $getDetaols,
-
-            ]
-        ];
+        if($getDetaols){
+            // 商品描述图片
+            $desc_img = Xcx_GoodsDescModel::select('src')->where(['goods_id'=>$goods_id])->get()->toArray();
+            $getDetaols->desc_img = array_column($desc_img,'src');
+            // 假图片 商品传播相册切换
+            $getDetaols->gallery=[
+                'https://img.alicdn.com/imgextra/i2/2206434878500/O1CN01FrVvMm2Cf3BNGIjSd_!!2206434878500.jpg_430x430q90.jpg',
+                'https://img.alicdn.com/bao/uploaded/i3/2360209412/O1CN01DqgM8v2JOkPJRA3UE_!!2-item_pic.png_400x400q60.jpg',
+                'https://img.alicdn.com/bao/uploaded/i3/1917047079/O1CN01RAue1W22AENWLX18A_!!0-item_pic.jpg_400x400q60.jpg',
+                'https://img.alicdn.com/bao/uploaded/bao/upload/O1CN01ToTLrs1de7pykr1zm_!!6000000003760-2-yinhe.png_400x400q60.jpg',
+            ];
+            $res = [
+                'error' => 0,
+                'msg' => 'ok',
+                'data' => [
+                    'info' => $getDetaols,
+                ]
+            ];
+        }else{
+            $res = [
+                'error' => 400004,
+                'msg' => 'Goods Not Exist',
+            ];
+        }
         return $res;
     }
     /**
@@ -98,7 +102,6 @@ class ApiController extends Controller
         // 查询商品的价格
         $shop_price = GoodsModel::find($goods_id)->shop_price;
         // 将商品存入数据库或redis中
-
         $goodsInfo = GoodsModel::where('goods_id',$goods_id)->first();// 根据商品id查询一条数据
         if($goodsInfo){
             $cartInfo = [
@@ -128,8 +131,25 @@ class ApiController extends Controller
      * 购物车列表
      */
     public function list(Request $request){
-      $uid = 2;
-
+        $uid = $_SERVER['uid'];
+        $goods = CartModel::where(['uid'=>$uid])->get();
+        if($goods){
+            $goods = $goods->toArray();
+            foreach ($goods as $k=>$v){
+                $g = GoodsModel::find($v['goods_id']);
+                $v['goods_name'] = $g->goods_name;
+            }
+        }else{
+            $goods = [];
+        }
+        $response = [
+            'error'=>0,
+            'msg'=>'ok',
+            'data'=>[
+                'list'=>$goods
+            ]
+        ];
+        return $response;
     }
 
     /**
@@ -139,7 +159,7 @@ class ApiController extends Controller
     public function addFav(Request $request){
       $goods_id = $request->get('goods_id');// 商品id
       // 加入收藏至redis 有序集合
-        $uid = 2;
+        $uid = $_SERVER['uid'];
         $redis_key = 'ss:goods:fav:'.$uid;// 用户收藏的商品到有序集合
         Redis::Zadd($redis_key,time(),$goods_id);// 添加至redis有序集合中
         $response = [
@@ -148,26 +168,46 @@ class ApiController extends Controller
         ];
         return $response;
     }
+    /**
+     * 商品数量增加
+     */
+    public function addCount(Request $request){
+        $goods_id = $request->get('goods_id');// 商品id
+        $uid = $_SERVER['uid'];// 用户id
+        $cart = CartModel::where('goods_id',$goods_id)->first()->toArray();
+        $goods_num = $cart['goods_num']+1;// 数量+1
+        if($goods_num){
+            $res = [
+                'goods_num'=>$goods_num
+            ];
+            CartModel::where('goods_id',$goods_id)->update($res);
+        }
+        $respose = [
+            'error'=>0,
+            'msg'=>'ok',
+        ];
+        return $respose;
+    }
+    /**
+     * 商品数量减少
+     */
+    public function minusCount(Request $request){
+        echo $goods_id = $request->get('goods_id');// 商品id
+        $cart = CartModel::where('goods_id',$goods_id)->first()->toArray();
+        $goods_num = $cart['goods_num']-1;// 数量+1
+        if($goods_num){
+            $res = [
+                'goods_num'=>$goods_num
+            ];
+            CartModel::where('goods_id',$goods_id)->update($res);
+        }
+        $respose = [
+            'error'=>0,
+            'msg'=>'ok',
+        ];
+        return $respose;
+    }
 }
-
-
-
-
-
-/**
-//                   'goods_img'=>[
-//                   '/images/pet.jpg',
-//                   '/images/rabbit.jpg',
-//                   '/images/pet.jpg',
-//                   '/images/rabbit.jpg',
-//               ],
- */
-
-
-
-
-
-
 ?>
 
 

@@ -138,10 +138,13 @@ Route::prefix('/text')->group(function(){
 // 小程序接口
 Route::prefix('/api')->group(function(){
     Route::get('/details','WeiXin\ApiController@goodslist');    // 列表页
+    Route::post('/user-login','WeiXin\XcxController@UserLogin');    // 小程序登录
     Route::get('/getDetails','WeiXin\ApiController@getDetails');// 详情页
-    Route::post('/addCart','WeiXin\ApiController@index')->middleware('check.token');// 加入购物车
-    Route::post('/list','WeiXin\ApiController@list');// 加入购物车
-    Route::get('/addFav','WeiXin\ApiController@addFav');// 加入购物车
+    Route::get('/addCart','WeiXin\ApiController@index')->middleware('check.token');// 加入购物车
+    Route::get('/cart-list','WeiXin\ApiController@list')->middleware('check.token');// 购物车列表
+    Route::get('/addFav','WeiXin\ApiController@addFav')->middleware('check.token');// 加入收藏
+    Route::get('/addCount','WeiXin\ApiController@addCount')->middleware('check.token');// 商品库存数量增加
+    Route::get('/minusCount','WeiXin\ApiController@minusCount')->middleware('check.token');// 商品库存数量减少
 });
 ?>
 
