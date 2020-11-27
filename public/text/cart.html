@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/css/cart.css">
+</head>
+<body>
+<div class="cart-box">
+    <!--    头部开始-->
+    <div class="cart-top">
+        <div class="cart-left">共2件商品</div>
+        <div class="cart-right">删除</div>
+    </div>
+    <!--    头部结束-->
+    <!--    列表开始-->
+    <div class="cart-list">
+        <!--   复选框     -->
+        <div class="item" style="display: flex;">
+            <input type="checkbox" checked="false">
+        </div>
+        <!--   图像     -->
+        <div class="images">
+            <img  src="/upload/images/timg.jfif" style="width: 200px;height: 200px;float: left">
+        </div>
+        <!--   商品信息     -->
+        <div class="content">
+            <div class="goods_name">商品名</div>
+            <div class="price">
+                <div class="goods_price">￥44.00</div>
+                <div class="number">
+                    <div class="decr">-</div>
+                    <input type="text" value="1">
+                    <div class="incr">+</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--    列表结束-->
+    <!--    底部开始-->
+    <div class="cart-bottom"></div>
+    <!--    底部结束-->
+</div>
+</body>
+</html>

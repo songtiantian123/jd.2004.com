@@ -1,0 +1,27 @@
+.cart-box{
+    width: 400px;
+    height:600px;
+    border: 1px solid red;
+}
+.cart-box .cart-top{
+    display: flex;
+    margin-left: 10px;
+    margin-right: 10px;
+    background-color: #eee;
+}
+.cart-box .cart-top .cart-left{
+    margin-right: 220px;
+}
+.cart-box .cart-top .cart-right{
+    margin-right: 10px;
+}
+.cart-list .item{
+    border: 1px solid greenyellow;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+}
+.cart-list .item .images img{
+    width: 200px;
+    height: 200px;
+}

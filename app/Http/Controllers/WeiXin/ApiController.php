@@ -151,7 +151,6 @@ class ApiController extends Controller
         ];
         return $response;
     }
-
     /**
      * 加入收藏
      * @param Request $request
@@ -180,7 +179,7 @@ class ApiController extends Controller
             $res = [
                 'goods_num'=>$goods_num
             ];
-            CartModel::where('goods_id',$goods_id)->update($res);
+            CartModel::where(['goods_id'=>$goods_id])->update($res);
         }
         $respose = [
             'error'=>0,
@@ -193,19 +192,44 @@ class ApiController extends Controller
      */
     public function minusCount(Request $request){
         echo $goods_id = $request->get('goods_id');// 商品id
+        $uid = $_SERVER['uid'];// 用户id
         $cart = CartModel::where('goods_id',$goods_id)->first()->toArray();
         $goods_num = $cart['goods_num']-1;// 数量+1
         if($goods_num){
             $res = [
                 'goods_num'=>$goods_num
             ];
-            CartModel::where('goods_id',$goods_id)->update($res);
+            CartModel::where(['goods_id'=>$goods_id])->update($res);
         }
         $respose = [
             'error'=>0,
             'msg'=>'ok',
         ];
         return $respose;
+    }
+    /**
+     * 统计商品数量
+     */
+    public function goodsCount(Request $request){
+        $goods_id = $request->get('goods_id');// 商品id
+        $uid = $_SERVER['uid'];// 用户id
+        $goodsCount = CartModel::where('uid',$uid)->count()->toArray();
+        $response = [
+            'error'=>0,
+            'msg'=>'ok',
+            'data'=>[
+                'goodsCount'=>$goodsCount
+            ]
+        ];
+        return $response;
+    }
+    /**
+     * 删除商品
+     */
+    public function deleteList(Request $request){
+        echo $goods_id = $request->get('goods_id');
+        echo $uid = $_SERVER['uid'];// 用户id
+
     }
 }
 ?>

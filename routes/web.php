@@ -145,6 +145,8 @@ Route::prefix('/api')->group(function(){
     Route::get('/addFav','WeiXin\ApiController@addFav')->middleware('check.token');// 加入收藏
     Route::get('/addCount','WeiXin\ApiController@addCount')->middleware('check.token');// 商品库存数量增加
     Route::get('/minusCount','WeiXin\ApiController@minusCount')->middleware('check.token');// 商品库存数量减少
+    Route::get('/goodsCount','WeiXin\ApiController@goodsCount')->middleware('check.token');// 统计商品数量
+    Route::get('/deleteList','WeiXin\ApiController@deleteList')->middleware('check.token');// 删除商品
 });
 ?>
 
