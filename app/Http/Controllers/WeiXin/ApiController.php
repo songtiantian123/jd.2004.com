@@ -106,6 +106,7 @@ class ApiController extends Controller
         if($goodsInfo){
             $cartInfo = [
                 'goods_id'=>$goodsInfo['goods_id'],// 商品id
+                'goods_name'=>$goodsInfo['goods_name'],
                 'uid'=>$uid, // 用户id
                 'goods_num'=>1,
                 'add_time'=>time(),// 添加时间
