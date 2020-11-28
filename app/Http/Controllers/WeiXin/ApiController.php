@@ -14,6 +14,7 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use App\Model\TicketModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redis;
+use SebastianBergmann\CodeCoverage\TestFixture\C;
 
 class ApiController extends Controller
 {
@@ -212,9 +213,8 @@ class ApiController extends Controller
      * 统计商品数量
      */
     public function goodsCount(Request $request){
-        $goods_id = $request->get('goods_id');// 商品id
         $uid = $_SERVER['uid'];// 用户id
-        $goodsCount = CartModel::where('uid',$uid)->count()->toArray();
+        $goodsCount = CartModel::where('uid',$uid)->count();
         $response = [
             'error'=>0,
             'msg'=>'ok',
@@ -225,12 +225,43 @@ class ApiController extends Controller
         return $response;
     }
     /**
-     * 删除商品
+     * 清空购物车
      */
     public function deleteList(Request $request){
-        echo $goods_id = $request->get('goods_id');
-        echo $uid = $_SERVER['uid'];// 用户id
-
+        $uid = $_SERVER['uid'];// 用户id
+        $deleteList = CartModel::where('uid',$uid)->first();
+        $response = [
+            'error'=>0,
+            'msg'=>'ok',
+            'data'=>[
+                'deleteList'=>$deleteList,
+            ]
+        ];
+        CartModel::where('uid',$uid)->delete();
+        return $response;
+    }
+    /**
+     * 删除商品
+     */
+    public function delete(Request $request){
+        $goods_id = $request->get('goods_id');
+        $uid = $_SERVER['uid'];
+        $delete = CartModel::where(['goods_id'=>$goods_id,'uid'=>$uid])->first()->toArray();
+        if(!empty($delete)){
+            $response=[
+                'error'=>'0',
+                'msg'=>'ok',
+                'data'=>$delete
+            ];
+            CartModel::where(['goods_id'=>$goods_id,'uid'=>$uid])->delete();
+            return $response;
+        }else{
+            $response=[
+                'error'=>'400004',
+                'msg'=>'no',
+            ];
+            return $response;
+        }
     }
 }
 ?>
