@@ -97,38 +97,38 @@ class ApiController extends Controller
     /**
      * 加入购物车
      */
-    public function index(Request $request){
+    public function index(Request $request)
+    {
         $goods_id = $request->get('goods_id');// 商品id
         $uid = $_SERVER['uid'];
         // 查询商品的价格
         $shop_price = GoodsModel::find($goods_id)->shop_price;
         // 将商品存入数据库或redis中
-        $goodsInfo = GoodsModel::where('goods_id',$goods_id)->first();// 根据商品id查询一条数据
-        if($goodsInfo){
+        $goodsInfo = GoodsModel::where('goods_id', $goods_id)->first();// 根据商品id查询一条数据
             $cartInfo = [
-                'goods_id'=>$goodsInfo['goods_id'],// 商品id
-                'goods_name'=>$goodsInfo['goods_name'],
-                'uid'=>$uid, // 用户id
-                'goods_num'=>1,
-                'add_time'=>time(),// 添加时间
-                'is_delete'=>1,// 1 删除 2 不删除
-                'shop_price'=>$shop_price,
+                'goods_id' => $goodsInfo['goods_id'],// 商品id
+                'goods_name' => $goodsInfo['goods_name'],
+                'goods_img' => $goodsInfo['goods_img'],
+                'uid' => $uid, // 用户id
+                'goods_num' => 1,
+                'add_time' => time(),// 添加时间
+                'is_delete' => 1,// 1 删除 2 不删除
+                'shop_price' => $shop_price,
             ];
             $res = CartModel::insert($cartInfo);// 加入小程序购物车
-            if($res){
-                $response=[
-                    'error'=>0,
-                    'msg'=>"ok",
+            if ($res) {
+                $response = [
+                    'error' => 0,
+                    'msg' => "ok",
                 ];
-            }else{
-                $response=[
-                    'error'=>400004,
-                    'msg'=>"加入购物车失败",
+            } else {
+                $response = [
+                    'error' => 400004,
+                    'msg' => "加入购物车失败",
                 ];
             }
             return $response;
         }
-    }
     /**
      * 购物车列表
      */
