@@ -32,9 +32,9 @@ class XcxController extends Controller{
             $openid = $data['openid'];// 用户openid
             // 判断 新用户 或 旧用户
             $user = Wx_UserModel::where(['openid'=>$openid])->first();
-            if($user['openid']==0){
+            if($user){
                 // 旧用户
-                die;
+                $uid = $user->id;
             }else{
                 // 新用户
                 $u_info = [
@@ -57,7 +57,7 @@ class XcxController extends Controller{
             $redis_login_hash = 'h:xcx:login:'.$token;//保存token
             $login_info= [
                 'uid'=>$uid, // 用户id
-                'user_name'=>'', // 用户名
+                'user_name'=>'天', // 用户名
                 'login_time'=>date('Y-m-d H:i:s'),// 用户登录事件
                 'login_ip'=>$request->getClientIp(),// 用户IP
                 'token'=>$token, // token

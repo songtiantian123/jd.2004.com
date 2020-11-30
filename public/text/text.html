@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    let arr = [22,33,44,55,66,777,88];
+    arr.forEach(item=>{
+        console.log(item)
+    })
+    let status = arr.every(function (item,index,array) {
+        if(item>20){
+            return true
+        }else{
+            return false
+        }
+    })
+    console.log(status)
+</script>
+</body>
+</html>

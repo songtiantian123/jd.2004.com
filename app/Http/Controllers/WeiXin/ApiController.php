@@ -27,6 +27,7 @@ class ApiController extends Controller
 //        app('debugbar')->disable();
     }
 
+
     /**
      * 首页的商品列表
      */
@@ -100,11 +101,20 @@ class ApiController extends Controller
     public function index(Request $request)
     {
         $goods_id = $request->get('goods_id');// 商品id
-        $uid = $_SERVER['uid'];
+        $uid = $_SERVER['uid']; // 用户id
         // 查询商品的价格
         $shop_price = GoodsModel::find($goods_id)->shop_price;
-        // 将商品存入数据库或redis中
-        $goodsInfo = GoodsModel::where('goods_id', $goods_id)->first();// 根据商品id查询一条数据
+        $goodsInfo = GoodsModel::where(['goods_id'=>$goods_id])->first();// 根据商品id查询一条数据
+        // 判断加入的购物车商品是否存在
+        $cart = CartModel::where(['goods_id'=>$goods_id])->first();
+        if($cart){ // 增加商品数量
+            CartModel::where(['goods_id'=>$goods_id])->increment('goods_num');
+            $response = [
+                'error'=>0,
+                'msg'=>'ok',
+            ];
+        }else{
+            // 将商品存入数据库或redis中
             $cartInfo = [
                 'goods_id' => $goodsInfo['goods_id'],// 商品id
                 'goods_name' => $goodsInfo['goods_name'],
@@ -115,8 +125,8 @@ class ApiController extends Controller
                 'is_delete' => 1,// 1 删除 2 不删除
                 'shop_price' => $shop_price,
             ];
-            $res = CartModel::insert($cartInfo);// 加入小程序购物车
-            if ($res) {
+            $id = CartModel::insertGetId($cartInfo);// 加入小程序购物车
+            if ($id) {
                 $response = [
                     'error' => 0,
                     'msg' => "ok",
@@ -129,6 +139,7 @@ class ApiController extends Controller
             }
             return $response;
         }
+    }
     /**
      * 购物车列表
      */
@@ -193,7 +204,7 @@ class ApiController extends Controller
      * 商品数量减少
      */
     public function minusCount(Request $request){
-        echo $goods_id = $request->get('goods_id');// 商品id
+        $goods_id = $request->get('goods_id');// 商品id
         $uid = $_SERVER['uid'];// 用户id
         $cart = CartModel::where('goods_id',$goods_id)->first()->toArray();
         $goods_num = $cart['goods_num']-1;// 数量+1
@@ -244,17 +255,20 @@ class ApiController extends Controller
      * 删除商品
      */
     public function delete(Request $request){
-        $goods_id = $request->get('goods_id');
         $uid = $_SERVER['uid'];
-        $delete = CartModel::where(['goods_id'=>$goods_id,'uid'=>$uid])->first()->toArray();
+        $goods_id = $request->post('goods');
+        $goods_arr = explode(',',$goods_id);
+        $delete = CartModel::whereIn('goods_id',$goods_arr)->delete();
+//        $delete = CartModel::where(['uid'=>$uid])->first();
+//        $goods_id = $delete['goods_id'];
         if(!empty($delete)){
             $response=[
                 'error'=>'0',
                 'msg'=>'ok',
                 'data'=>$delete
             ];
-            CartModel::where(['goods_id'=>$goods_id,'uid'=>$uid])->delete();
-            return $response;
+//            CartModel::where(['goods_id'=>$goods_id])->delete();
+//            return $response;
         }else{
             $response=[
                 'error'=>'400004',
