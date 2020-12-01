@@ -110,7 +110,7 @@ class WeiXinController extends Controller
                 $toUser = $data->FromUserName;
                 $fromUser = $data->ToUserName;
                 // 将记录存入库中
-                $msg_type = $data['MsgType'];
+                $msg_type = $data->MsgType;
                 switch ($msg_type) {
                     case 'event':
                         if($data->Event=='subscribe'){
