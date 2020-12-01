@@ -388,6 +388,19 @@ class WeiXinController extends Controller
         $info = sprintf($template, $toUser, $fromUser, time(), 'news', 1 ,$title,$description,$content,$url);
         return $info;
     }
+    // 7 回复关注
+    private function scribe($toUser,$fromUser,$title,$description,$content,$url){
+        $template = "<xml>
+                        <ToUserName><![CDATA[%s]]></ToUserName>
+                        <FromUserName><![CDATA[%s]]></FromUserName>
+                        <CreateTime>%s</CreateTime>
+                        <MsgType><![CDATA[%s]]></MsgType>
+                        <Event><![CDATA[%s]]></Event>
+                        <EventKey><![CDATA[%s]]></EventKey>
+                    </xml>";
+        $info = sprintf($template, $toUser, $fromUser, time() ,$title,$description,$content,$url);
+        return $info;
+    }
     /**
      * 菜单click点击事件
      * @param Request $request
@@ -734,7 +747,7 @@ class WeiXinController extends Controller
             Wx_UserModel::insert($userInfo);
         }
         // 发送消息
-        $result = $this->text($toUser, $fromUser,time(), $msgType, $content);
+        $result = $this->scribe($toUser, $fromUser,time(), $msgType, $content);
         return $result;
     }
     /**
