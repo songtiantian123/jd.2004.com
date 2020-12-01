@@ -111,10 +111,10 @@ class WeiXinController extends Controller
                 $msg_type = $data->MsgType; // 推送事件的消息类型
                 switch ($msg_type) {
                     case 'event':
-                        if($data->Event=='subscribe'){
+                        if($data->Event=='subscribe'){ // 扫码关注
                             echo $this->subscribe($data);
                             exit;
-                        }elseif($data->Event=='unsubscribehandler'){
+                        }elseif($data->Event=='unsubscribehandler'){ // 取消关注
                             echo '';
                             exit;
                         }elseif($data->Event=='CLICK'){// 点击事件
@@ -168,7 +168,7 @@ class WeiXinController extends Controller
                 echo "";
             }
             // 被动回复用户文本
-            if (strtolower($msg_type->MsgType) == 'text') {
+            if (strtolower($data->MsgType) == 'text') {
                 $toUser = $data->FromUserName;
                 $fromUser = $data->ToUserName;
                 switch ($data->Content) {
@@ -233,7 +233,7 @@ class WeiXinController extends Controller
                 }
             }
             //将素材存入数据库
-            if (strtolower($msg_type->MsgType) == 'image') {
+            if (strtolower($data->MsgType) == 'image') {
                 // 下载素材
                 $token = $this->getAccessToken();
                 $media_id = $data->MediaId;
@@ -733,8 +733,15 @@ class WeiXinController extends Controller
             ];
             Wx_UserModel::insert($userInfo);
         }
+        $template = "<xml>
+                            <ToUserName><![CDATA[%s]]></ToUserName>
+                            <FromUserName><![CDATA[%s]]></FromUserName>
+                            <CreateTime>%s</CreateTime>
+                            <MsgType><![CDATA[%s]]></MsgType>
+                            <Content><![CDATA[%s]]></Content>
+                            </xml>";
         // 发送消息
-        $result = $this->text($toUser, $fromUser, $content);
+        $result = $this->text($template,$toUser, $fromUser, $content);
         return $result;
     }
     /**
