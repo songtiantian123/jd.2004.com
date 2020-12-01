@@ -183,12 +183,12 @@ class WeiXinController extends Controller
                         return $result;
                         break;
                     case '照片':
-                        $content = "Eexi1YJmQ9NYVn95CoIB1nHHNnjDs1mjBcs2xK7kPkrAS29rTL8d224U1lqzl1TQ"; // 目前 id 是死的
+                        $content = "暂无照片"; // 目前 id 是死的
                         $result = $this->picture($toUser, $fromUser, $content);
                         return $result;
                         break;
                     case '语音':
-                        $content = "CIYQ3MwBK3gXJVGVzRgsMgdy1rBjbJ11Krv41r37uQIbKfDmfI6WchQ-ByA0ITVO";
+                        $content = "暂无";
                         $result = $this->voice($toUser, $fromUser, $content);
                         return $result;
                         break;
@@ -263,32 +263,32 @@ class WeiXinController extends Controller
                     return $result;
                 }
             }
-//            点击一级菜单
-            if($data->Event=='CLICK'){
-                $this->clickhandler($data);
-//                 天气
-                if($data->EventKey=='HEBEI_WEATHER'){
-                    $content = $this->weather();
-                    $toUser = $data->FromUserName;
-                    $fromUser = $data->ToUserName;
-                    $result = $this->text($toUser,$fromUser,$content);
-                    return $result;
-                }
-
-                // 签到
-                if($data->EventKey=='sign'){
-                                    $key = 'sign'.date('Y-m-d',time());
-                                    $content = '签到成功';
-                                    $user_sign = Redis::zrange($key,0,-1);
-                                    if(in_array((string)$toUser,$user_sign)){
-                                        $content = '已签到';
-                                    }else{
-                                        Redis::zadd($key,time(),(string)$toUser);
-                                    }
-                                    $result = $this->text($toUser,$fromUser,$content);
-                                    return $result;
-                                }
-            }
+            //            点击一级菜单
+//            if($data->Event=='CLICK'){
+//                $this->clickhandler($data);
+////                 天气
+//                if($data->EventKey=='HEBEI_WEATHER'){
+//                    $content = $this->weather();
+//                    $toUser = $data->FromUserName;
+//                    $fromUser = $data->ToUserName;
+//                    $result = $this->text($toUser,$fromUser,$content);
+//                    return $result;
+//                }
+//
+//                // 签到
+//                if($data->EventKey=='sign'){
+//                                    $key = 'sign'.date('Y-m-d',time());
+//                                    $content = '签到成功';
+//                                    $user_sign = Redis::zrange($key,0,-1);
+//                                    if(in_array((string)$toUser,$user_sign)){
+//                                        $content = '已签到';
+//                                    }else{
+//                                        Redis::zadd($key,time(),(string)$toUser);
+//                                    }
+//                                    $result = $this->text($toUser,$fromUser,$content);
+//                                    return $result;
+//                                }
+//            }
         } else {
             return false;
         }
