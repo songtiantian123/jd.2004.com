@@ -168,7 +168,7 @@ class WeiXinController extends Controller
                 echo "";
             }
             // 被动回复用户文本
-            if (strtolower($data->MsgType) == 'text') {
+            if (strtolower($msg_type->MsgType) == 'text') {
                 $toUser = $data->FromUserName;
                 $fromUser = $data->ToUserName;
                 switch ($data->Content) {
@@ -233,7 +233,7 @@ class WeiXinController extends Controller
                 }
             }
             //将素材存入数据库
-            if (strtolower($data->MsgType) == 'image') {
+            if (strtolower($msg_type->MsgType) == 'image') {
                 // 下载素材
                 $token = $this->getAccessToken();
                 $media_id = $data->MediaId;
