@@ -103,7 +103,6 @@ class WeiXinController extends Controller
             // 2 把xml文本转换为php的对象或数组
             $data = simplexml_load_string($xml_str,'SimpleXMLElement', LIBXML_NOCDATA);
             $this->data=$data;
-            //            $msg_type = $data->MsgType;
             $toUser = $data->FromUserName;
             $fromUser = $data->ToUserName;
             //将用户的会话记录 入库
@@ -111,7 +110,7 @@ class WeiXinController extends Controller
                 $toUser = $data->FromUserName;
                 $fromUser = $data->ToUserName;
                 // 将记录存入库中
-                $msg_type = $data->MsgType;
+                $msg_type = $data['MsgType'];
                 switch ($msg_type) {
                     case 'event':
                         if($data->Event=='subscribe'){
