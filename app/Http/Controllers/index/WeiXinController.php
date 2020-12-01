@@ -97,7 +97,7 @@ class WeiXinController extends Controller
         file_put_contents('wx_event.log',$log_str,FILE_APPEND);
         // 2 把xml文本转换为php的对象或数组
         $data = simplexml_load_string($xml_str);
-        $this->$data=$data;
+        $this->data=$data;
         $msg_type = $data->MsgType;
         if ($tmpStr == $signature) {
             $toUser = $data->FromUserName;
