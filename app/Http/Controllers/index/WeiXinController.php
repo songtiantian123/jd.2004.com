@@ -735,16 +735,8 @@ class WeiXinController extends Controller
             ];
             Wx_UserModel::insertGetId($userInfo);
         }
-        $template = "<xml>
-                        <ToUserName><![CDATA[%s]]></ToUserName>
-                        <FromUserName><![CDATA[%s]]></FromUserName>
-                        <CreateTime>%s</CreateTime>
-                        <MsgType><![CDATA[%s]]></MsgType>
-                        <Event><![CDATA[%s]]></Event>
-                        <EventKey><![CDATA[%s]]></EventKey>
-                    </xml>";
         // 发送消息
-        $result = $this->text($toUser, $fromUser,time(),$content);
+        $result = $this->text($toUser, $fromUser,$content);
         return $result;
     }
     /**
