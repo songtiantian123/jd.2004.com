@@ -11,12 +11,13 @@ use Illuminate\Support\Str;
 use App\Model\UserModel;
 use GuzzleHttp\Client;
 use App\Model\MediaModel;
+use App\Model\Wx_UserModel;
 class WeiXinController extends Controller
 {
     /**
      * 微信授权
      */
-    
+
     public function index(){
         $redirect ='http://2004.liliqin.xyz/'.'wx/auth';
         $appId = "wxb5ccb15a85957e7b";
@@ -713,7 +714,7 @@ class WeiXinController extends Controller
         file_put_contents('logs.log', $url);
         $user = file_get_contents($url);
         $user = json_decode($user, true);
-        $subscribe = UserModel::where('openid', $user['openid'])->first();
+        $subscribe = Wx_UserModel::where('openid', $user['openid'])->first();
         // 关注后存入数据库 已经关注 提示欢迎回来
         if (!empty($subscribe)) {
             $content = '欢迎回来';
@@ -728,7 +729,7 @@ class WeiXinController extends Controller
                 'headimgurl' => $user['headimgurl'],
                 'subscribe_time' => $user['subscribe_time'],
             ];
-            UserModel::insert($userInfo);
+            Wx_UserModel::insert($userInfo);
         }
         // 发送消息
         $result = $this->text($toUser, $fromUser, $content);
