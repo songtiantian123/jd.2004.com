@@ -732,7 +732,7 @@ class WeiXinController extends Controller
                 'headimgurl' => $user['headimgurl'],
                 'subscribe_time' => $user['subscribe_time'],
             ];
-            Wx_UserModel::insert($userInfo);
+            Wx_UserModel::insertGetId($userInfo);
         }
         $template = "<xml>
                         <ToUserName><![CDATA[%s]]></ToUserName>
