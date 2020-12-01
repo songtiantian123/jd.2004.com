@@ -34,7 +34,7 @@ class XcxController extends Controller{
             $user = Wx_UserModel::where(['openid'=>$openid])->first();
             if($user){
                 // 旧用户
-                $uid = $user->id;
+//                $uid = $user->id;
             }else{
                 // 新用户
                 $u_info = [

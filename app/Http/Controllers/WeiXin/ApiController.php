@@ -277,6 +277,13 @@ class ApiController extends Controller
             return $response;
         }
     }
+    /**
+     * 去结算
+     */
+    public function close(Request $request){
+        $goods_id = $request->post('goods');
+        dd($goods_id)   ;
+    }
 }
 ?>
 

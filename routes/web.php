@@ -148,6 +148,7 @@ Route::prefix('/api')->group(function(){
     Route::get('/goodsCount','WeiXin\ApiController@goodsCount')->middleware('check.token');// 统计商品数量
     Route::get('/deleteList','WeiXin\ApiController@deleteList')->middleware('check.token');// 清空购物车
     Route::post('/delete','WeiXin\ApiController@delete')->middleware('check.token');// 删除商品
+    Route::post('/close','WeiXin\ApiController@close')->middleware('check.token');// 去结算
 });
 ?>
 
