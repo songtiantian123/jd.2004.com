@@ -168,7 +168,7 @@ class WeiXinController extends Controller
                 echo "";
             }
             // 被动回复用户文本
-            if (strtolower($data->MsgType) == 'text') {
+            if (strtolower($data['MsgType']) == 'text') {
                 $toUser = $data->FromUserName;
                 $fromUser = $data->ToUserName;
                 switch ($data->Content) {
@@ -733,15 +733,8 @@ class WeiXinController extends Controller
             ];
             Wx_UserModel::insert($userInfo);
         }
-        $template = "<xml>
-                            <ToUserName><![CDATA[%s]]></ToUserName>
-                            <FromUserName><![CDATA[%s]]></FromUserName>
-                            <CreateTime>%s</CreateTime>
-                            <MsgType><![CDATA[%s]]></MsgType>
-                            <Content><![CDATA[%s]]></Content>
-                            </xml>";
         // 发送消息
-        $result = $this->text($template,$toUser, $fromUser, $content);
+        $result = $this->text($toUser, $fromUser, $content);
         return $result;
     }
     /**
