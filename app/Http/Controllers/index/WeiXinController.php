@@ -16,6 +16,7 @@ class WeiXinController extends Controller
     /**
      * 微信授权
      */
+    
     public function index(){
         $redirect ='http://2004.liliqin.xyz/'.'wx/auth';
         $appId = "wxb5ccb15a85957e7b";
