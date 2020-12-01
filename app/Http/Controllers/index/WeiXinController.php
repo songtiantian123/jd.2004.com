@@ -168,7 +168,7 @@ class WeiXinController extends Controller
                 echo "";
             }
             // 被动回复用户文本
-            if (strtolower($data['MsgType']) == 'text') {
+            if (strtolower($data->MsgType) == 'text') {
                 $toUser = $data->FromUserName;
                 $fromUser = $data->ToUserName;
                 switch ($data->Content) {
@@ -705,7 +705,7 @@ class WeiXinController extends Controller
     /**
      * 扫码关注
      */
-    public function subscribe($data){
+    protected function subscribe($data){
         $toUser = $data->FromUserName;
         $fromUser = $data->ToUserName;
         $msgType = 'text';
@@ -734,7 +734,7 @@ class WeiXinController extends Controller
             Wx_UserModel::insert($userInfo);
         }
         // 发送消息
-        $result = $this->text($toUser, $fromUser, $content);
+        $result = $this->text($toUser, $fromUser,time(), $msgType, $content);
         return $result;
     }
     /**
