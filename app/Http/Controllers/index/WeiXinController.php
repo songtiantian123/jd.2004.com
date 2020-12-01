@@ -744,7 +744,7 @@ class WeiXinController extends Controller
                         <EventKey><![CDATA[%s]]></EventKey>
                     </xml>";
         // 发送消息
-        $result = $this->text($template,$toUser, $fromUser,time(),$content);
+        $result = $this->text($toUser, $fromUser,time(),$content);
         return $result;
     }
     /**
