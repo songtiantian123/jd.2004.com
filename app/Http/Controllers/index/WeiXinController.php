@@ -735,12 +735,12 @@ class WeiXinController extends Controller
             Wx_UserModel::insert($userInfo);
         }
         $template = "<xml>
-                        <ToUserName><![CDATA[gh_6e8f9e020d60]]></ToUserName>
-                        <FromUserName><![CDATA[obhsv6YWuyDAfIWqGsnCyxIQ6h-g]]></FromUserName>
-                        <CreateTime>1606812346</CreateTime>
-                        <MsgType><![CDATA[event]]></MsgType>
-                        <Event><![CDATA[subscribe]]></Event>
-                        <EventKey><![CDATA[]]></EventKey>
+                        <ToUserName><![CDATA[%s]]></ToUserName>
+                        <FromUserName><![CDATA[%s]]></FromUserName>
+                        <CreateTime>%s</CreateTime>
+                        <MsgType><![CDATA[%s]]></MsgType>
+                        <Event><![CDATA[%s]]></Event>
+                        <EventKey><![CDATA[%s]]></EventKey>
                     </xml>";
         // 发送消息
         $result = $this->text($template,$toUser, $fromUser,time(), $msgType, $content);
