@@ -14,7 +14,7 @@ use App\Model\MediaModel;
 use App\Model\Wx_UserModel;
 class WeiXinController extends Controller
 {
-    protected $data;
+//    protected $data;
     /**
      * 微信授权
      */
@@ -99,7 +99,7 @@ class WeiXinController extends Controller
 
         // 2 把xml文本转换为php的对象或数组
         $data = simplexml_load_string($xml_str);
-        $this->data=$data;
+//        $this->data=$data;
         $msg_type = $data->MsgType;
         if ($tmpStr == $signature) {
             $toUser = $data->FromUserName;
