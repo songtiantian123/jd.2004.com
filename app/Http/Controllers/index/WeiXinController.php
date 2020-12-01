@@ -167,6 +167,7 @@ class WeiXinController extends Controller
                 }
                 echo "";
             }
+            // 判断该数据是否是定义的事件推送
             // 被动回复用户文本
             if (strtolower($data->MsgType) == 'text') {
                 $toUser = $data->FromUserName;
@@ -386,19 +387,6 @@ class WeiXinController extends Controller
                               </Articles>
                             </xml>";
         $info = sprintf($template, $toUser, $fromUser, time(), 'news', 1 ,$title,$description,$content,$url);
-        return $info;
-    }
-    // 7 回复关注
-    private function scribe($toUser,$fromUser,$title,$description,$content,$url){
-        $template = "<xml>
-                        <ToUserName><![CDATA[%s]]></ToUserName>
-                        <FromUserName><![CDATA[%s]]></FromUserName>
-                        <CreateTime>%s</CreateTime>
-                        <MsgType><![CDATA[%s]]></MsgType>
-                        <Event><![CDATA[%s]]></Event>
-                        <EventKey><![CDATA[%s]]></EventKey>
-                    </xml>";
-        $info = sprintf($template, $toUser, $fromUser, time() ,$title,$description,$content,$url);
         return $info;
     }
     /**
@@ -746,8 +734,16 @@ class WeiXinController extends Controller
             ];
             Wx_UserModel::insert($userInfo);
         }
+        $template = "<xml>
+                        <ToUserName><![CDATA[gh_6e8f9e020d60]]></ToUserName>
+                        <FromUserName><![CDATA[obhsv6YWuyDAfIWqGsnCyxIQ6h-g]]></FromUserName>
+                        <CreateTime>1606812346</CreateTime>
+                        <MsgType><![CDATA[event]]></MsgType>
+                        <Event><![CDATA[subscribe]]></Event>
+                        <EventKey><![CDATA[]]></EventKey>
+                    </xml>";
         // 发送消息
-        $result = $this->scribe($toUser, $fromUser,time(), $msgType, $content);
+        $result = $this->text($template,$toUser, $fromUser,time(), $msgType, $content);
         return $result;
     }
     /**
