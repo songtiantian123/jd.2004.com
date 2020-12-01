@@ -19,7 +19,7 @@ class WeiXinController extends Controller
      */
 
     public function index(){
-        $redirect ='http://2004.liliqin.xyz/'.'wx/auth';
+        $redirect ='https://2004.liliqin.xyz/'.'wx/auth';
         $appId = "wxb5ccb15a85957e7b";
         $url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=$appId&redirect_uri=$redirect&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect";
         return redirect($url);
