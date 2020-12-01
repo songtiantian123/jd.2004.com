@@ -14,6 +14,7 @@ use App\Model\MediaModel;
 use App\Model\Wx_UserModel;
 class WeiXinController extends Controller
 {
+    protected $data;
     protected $users = [
         'obhsv6YWuyDAfIWqGsnCyxIQ6h-g'
     ];
@@ -101,7 +102,7 @@ class WeiXinController extends Controller
             file_put_contents('wx_event.log',$log_str,FILE_APPEND);
 
             // 2 把xml文本转换为php的对象或数组
-            $data = simplexml_load_string($xml_str,'SimpleXMLElement', LIBXML_NOCDATA);
+            $data = simplexml_load_string($xml_str);
             $this->data=$data;
             //将用户的会话记录 入库
             if (!empty($data)) {
@@ -707,8 +708,8 @@ class WeiXinController extends Controller
      * 扫码关注
      */
     protected function subscribe($data){
-        $toUser = $data->FromUserName;
-        $fromUser = $data->ToUserName;
+        $toUser = $this->data->FromUserName;
+        $fromUser = $this->data->ToUserName;
         $msgType = 'text';
         $content = '欢迎关注我';
         // 获取access_token
@@ -717,7 +718,7 @@ class WeiXinController extends Controller
         file_put_contents('logs.log', $url);
         $user = file_get_contents($url);
         $user = json_decode($user, true);
-        $subscribe = Wx_UserModel::where('openid', $user['openid'])->first();
+        $subscribe = Wx_UserModel::where(['openid'=>$toUser])->first();
         // 关注后存入数据库 已经关注 提示欢迎回来
         if (!empty($subscribe)) {
             $content = '欢迎回来';
@@ -743,7 +744,7 @@ class WeiXinController extends Controller
                         <EventKey><![CDATA[%s]]></EventKey>
                     </xml>";
         // 发送消息
-        $result = $this->text($template,$toUser, $fromUser,time(), $msgType, $content);
+        $result = $this->text($template,$toUser, $fromUser,time(),$content);
         return $result;
     }
     /**
