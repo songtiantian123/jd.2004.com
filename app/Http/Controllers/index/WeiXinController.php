@@ -93,26 +93,22 @@ class WeiXinController extends Controller
         $tmpStr = implode( $tmpArr );
         $tmpStr = sha1( $tmpStr );
 
-
-        // 获取到微信推送过来的post数据
-        $xml_str = file_get_contents("php://input");
-        // 记录日志
-        $log_str = date('Y-m-d H:i:s').$xml_str."\n\n";
-        file_put_contents('wx_event.log',$log_str,FILE_APPEND);
-
-        // 2 把xml文本转换为php的对象或数组
-        $data = simplexml_load_string($xml_str,'SimpleXMLElement', LIBXML_NOCDATA);
-        $this->data=$data;
-        $toUser = $data->FromUserName;
-        $fromUser = $data->ToUserName;
-
         if ($tmpStr == $signature) {
+            // 获取到微信推送过来的post数据
+            $xml_str = file_get_contents("php://input");
+            // 记录日志
+            $log_str = date('Y-m-d H:i:s').$xml_str."\n\n";
+            file_put_contents('wx_event.log',$log_str,FILE_APPEND);
+
+            // 2 把xml文本转换为php的对象或数组
+            $data = simplexml_load_string($xml_str,'SimpleXMLElement', LIBXML_NOCDATA);
+            $this->data=$data;
             //将用户的会话记录 入库
             if (!empty($data)) {
                 $toUser = $data->FromUserName;
                 $fromUser = $data->ToUserName;
                 // 将记录存入库中
-                $msg_type = $data->MsgType;
+                $msg_type = $data->MsgType; // 推送事件的消息类型
                 switch ($msg_type) {
                     case 'event':
                         if($data->Event=='subscribe'){
